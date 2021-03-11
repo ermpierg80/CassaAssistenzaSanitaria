@@ -10,7 +10,8 @@ namespace CassaAssistenzaSanitaria.UITests
         {
             if (platform == Platform.Android)
             {
-                return ConfigureApp.Android.StartApp();
+                //return ConfigureApp.Android.StartApp();
+                return ConfigureApp.Android.InstalledApp("com.companyname.cassa_assistenza_sanitaria").StartApp();
             }
 
             return ConfigureApp.iOS.StartApp();

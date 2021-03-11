@@ -23,7 +23,7 @@ namespace CassaAssistenzaSanitaria.Views
 
             BindingContext = viewModel = new ItemsViewModel();
         }
-
+        //da analizzare
         async void OnItemSelected(object sender, EventArgs args)
         {
             var layout = (BindableObject)sender;
