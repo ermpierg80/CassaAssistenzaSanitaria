@@ -1,3 +1,0 @@
-﻿CREATE LOGIN [sqluser2]
-    WITH PASSWORD = N'udqh<wx1IYyiuqxc7ekcxxlhmsFT7_&#$!~<rjwduw:eau=m', SID = 0x4BA62AE359AE8946941B32B8B683DA39, DEFAULT_DATABASE = [CassaAssistenza], DEFAULT_LANGUAGE = [Italiano], CHECK_EXPIRATION = ON;
-
