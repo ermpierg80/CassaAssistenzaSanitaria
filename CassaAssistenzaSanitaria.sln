@@ -14,6 +14,15 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CassaAssistenzaSanitaria", "CassaAssistenzaSanitaria\CassaAssistenzaSanitaria.csproj", "{7AA1350C-4D26-48CD-8C4C-68083D9A0B50}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CassaAssisstenzaSanitaria.DB", "CassaAssisstenzaSanitaria.DB", "{674D67DD-2AC8-4D9A-8E83-DE5392CD1BB9}"
+	ProjectSection(SolutionItems) = preProject
+		CassaAssistenzaSanitaria.DB\README.txt = CassaAssistenzaSanitaria.DB\README.txt
+		CassaAssistenzaSanitaria.DB\verificaDB.sql = CassaAssistenzaSanitaria.DB\verificaDB.sql
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BB5E9B64-2CC7-42E1-8F7E-BE06568CD4E6}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
