@@ -18,6 +18,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CassaAssistenzaSanitaria.DB", "CassaAssistenzaSanitaria.DB", "{3BD3480C-CBB8-4027-9DED-D84D4DC1EDF8}"
+	ProjectSection(SolutionItems) = preProject
+		Readme.txt = Readme.txt
+		verificaDB.sql = verificaDB.sql
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -129,6 +135,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{3BD3480C-CBB8-4027-9DED-D84D4DC1EDF8} = {BB5E9B64-2CC7-42E1-8F7E-BE06568CD4E6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5BE6D9B5-E0EB-4497-9AE0-55B4B6A14420}
