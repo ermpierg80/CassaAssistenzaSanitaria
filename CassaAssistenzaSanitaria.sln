@@ -16,7 +16,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CassaAssisstenzaSanitaria.DB", "CassaAssisstenzaSanitaria.DB", "{674D67DD-2AC8-4D9A-8E83-DE5392CD1BB9}"
 	ProjectSection(SolutionItems) = preProject
 		README.txt = README.txt
-		verificaDB.sql = verificaDB.sql
 	EndProjectSection
 EndProject
 Global
