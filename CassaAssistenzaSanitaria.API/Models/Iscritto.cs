@@ -17,15 +17,11 @@ namespace CassaAssistenzaSanitaria.API.Models
         [Column(TypeName = "varchar(16)")]
         public string CodiceFiscale { get; set; }
         [Required]
-        [Column(TypeName = "varchar(10)")]
-        public string Password	{ get; set; }
-        [Required]
         [Column(TypeName = "varchar(27)")]
         public string IBAN { get; set; }
 
         public DateTime DataIscrizione { get; set; }
 		public DateTime DataCancellazione { get; set; }
-		public bool DaAttivare { get; set; }
 
         public string GetNomeCompleto()
         {

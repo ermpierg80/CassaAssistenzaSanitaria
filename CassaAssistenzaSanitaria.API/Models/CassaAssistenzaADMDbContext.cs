@@ -2,10 +2,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CassaAssistenzaSanitaria.API.Models
 {
-    public class CassaAssistenzaContext : DbContext
+    public class CassaAssistenzaADMDbContext : DbContext
     {
         string _connectionString;
-        public CassaAssistenzaContext(string connectionString)
+        public CassaAssistenzaADMDbContext(string connectionString)
         {
             this._connectionString = connectionString;
         }
