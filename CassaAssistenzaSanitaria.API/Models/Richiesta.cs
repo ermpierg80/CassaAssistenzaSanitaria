@@ -8,7 +8,6 @@ namespace CassaAssistenzaSanitaria.API.Models
         public int Id { get; set; }
         public virtual Prestazione Tipologia { get; set; }
 	    public virtual Iscritto Richiedente { get; set; }
-
         [Column(TypeName = "decimal(7,2)")]
         public decimal ImportoFattura { get; set;}
         [Column(TypeName = "decimal(7,2)")]
@@ -17,6 +16,8 @@ namespace CassaAssistenzaSanitaria.API.Models
         public decimal ImportoACarico { get; set;}
         [Column(TypeName = "decimal(7,2)")]
         public decimal ImportoDaRimborsare { get; set; }
+        [Column(TypeName = "varchar(50)")]
+        public string NumeroFattura { get; set; }
         [Column(TypeName = "varchar(max)")]
         public string Note { get; set; }
         public DateTime DataFattura { get; set; }

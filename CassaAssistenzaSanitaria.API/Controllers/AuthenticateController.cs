@@ -9,6 +9,9 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.IO;
+using Microsoft.AspNetCore.Http;
+using System.Text.Json;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -18,9 +21,11 @@ namespace CassaAssistenzaSanitaria.API.Controllers
     public class AuthenticateController : Controller
     {
         private UserManager<ApplicationUser> userManager;
+        private log4net.ILog log;
 
         public AuthenticateController(UserManager<ApplicationUser> userManager)
         {
+            this.log = Logger.GetLogger(typeof(AuthenticateController));
             this.userManager = userManager;
         }
 
@@ -28,32 +33,38 @@ namespace CassaAssistenzaSanitaria.API.Controllers
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
-            var user = await userManager.FindByNameAsync(model.Username);
-            if (user != null && await userManager.CheckPasswordAsync(user, model.Password))
-            { 
-                var authClaims = new List<Claim>
+            log.Info("TEST!!!");
+            model = JsonSerializer.Deserialize<LoginModel>(HttpContext.Items["Body"].ToString());
+
+            if (model != null)
+            {
+                var user = await userManager.FindByNameAsync(model.Username);
+                if (user != null && await userManager.CheckPasswordAsync(user, model.Password))
+                {
+                    var authClaims = new List<Claim>
                 {
                     new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
                 };
-                var roles = await userManager.GetRolesAsync(user);
-                foreach (var userRole in roles)
-                {
-                    authClaims.Add(new Claim(ClaimTypes.Role, userRole));
+                    var roles = await userManager.GetRolesAsync(user);
+                    foreach (var userRole in roles)
+                    {
+                        authClaims.Add(new Claim(ClaimTypes.Role, userRole));
+                    }
+                    var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("7S79jvOkEdwoRqHx"));
+                    var token = new JwtSecurityToken(
+                        issuer: "https://dotnetdetail.net",
+                        audience: "https://dotnetdetail.net",
+                        expires: DateTime.Now.AddDays(5),
+                        claims: authClaims,
+                        signingCredentials: new Microsoft.IdentityModel.Tokens.SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
+                        );
+                    return Ok(new
+                    {
+                        token = new JwtSecurityTokenHandler().WriteToken(token),
+                        expiration = token.ValidTo
+                    });
                 }
-                var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("7S79jvOkEdwoRqHx"));
-                var token = new JwtSecurityToken(
-                    issuer: "https://dotnetdetail.net",
-                    audience: "https://dotnetdetail.net",
-                    expires: DateTime.Now.AddDays(5),
-                    claims: authClaims,
-                    signingCredentials: new Microsoft.IdentityModel.Tokens.SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
-                    );
-                return Ok(new
-                {
-                    token = new JwtSecurityTokenHandler().WriteToken(token),
-                    expiration = token.ValidTo
-                });
             }
             return Unauthorized();
         }

@@ -6,6 +6,7 @@ using CassaAssistenzaSanitaria.API.Data;
 using System.Security.Claims;
 using System.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
+using System.Collections.Generic;
 
 namespace CassaAssistenzaSanitaria.API.Models
 {
@@ -81,6 +82,26 @@ namespace CassaAssistenzaSanitaria.API.Models
                 return Nome;
             }
             catch (Exception e)
+            {
+                throw new Exception(e.Message, e.InnerException);
+            }
+        }
+
+        public static List<string> RetrieveUserRoles(ClaimsPrincipal User)
+        {
+            List<string> Roles = new List<string>();
+            try
+            {
+                foreach (Claim info in User.Claims)
+                {
+                    if (info.Type.Equals(ClaimTypes.Role))
+                    {
+                        Roles.Add(info.Value);
+                    }
+                }
+                return Roles;
+            }
+            catch(Exception e)
             {
                 throw new Exception(e.Message, e.InnerException);
             }
