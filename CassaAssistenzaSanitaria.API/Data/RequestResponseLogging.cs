@@ -3,6 +3,8 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace CassaAssistenzaSanitaria.API.Data
 {
@@ -44,29 +46,33 @@ namespace CassaAssistenzaSanitaria.API.Data
 
         private async void FormatRequest(HttpRequest request)
         {
-            //This line allows us to set the reader for the request back at the beginning of its stream.
-            request.EnableBuffering();
-            
-            //We now need to read the request stream.  First, we create a new byte[] with the same length as the request stream...
-            var buffer = new byte[Convert.ToInt32(request.ContentLength)];
-
-            //...Then we copy the entire request stream into the new buffer.
-            await request.Body.ReadAsync(buffer, 0, buffer.Length);
-
-            //We convert the byte[] into a string using UTF8 encoding...
-            var bodyAsText = Encoding.UTF8.GetString(buffer);
-
-            //..and finally, assign the read body back to the request body item for the retrieve in controller
-            request.HttpContext.Items.Add("Body", bodyAsText);
+            string bodyAsText = await GetRequestBodyAsync(request);
 
             //Log the request...
             this.log.Info($"{request.Scheme} {request.Host}{request.Path} {request.QueryString} {bodyAsText}");
-
             foreach (var header in request.Headers)
             {
-                //Log the request...
                 this.log.Info("header(" + header.Key + "): " + header.Value);
             }
+        }
+
+        public async Task<string> GetRequestBodyAsync(HttpRequest request)
+        {
+            string strRequestBody = "";
+
+            // IMPORTANT: Ensure the requestBody can be read multiple times.
+            HttpRequestRewindExtensions.EnableBuffering(request);
+
+            // IMPORTANT: Leave the body open so the next middleware can read it.
+            using (StreamReader reader = new StreamReader(request.Body, Encoding.UTF8, detectEncodingFromByteOrderMarks: false, leaveOpen: true))
+            {
+                strRequestBody = await reader.ReadToEndAsync();
+
+                // IMPORTANT: Reset the request body stream position so the next middleware can read it
+                request.Body.Position = 0;
+            }
+
+            return strRequestBody;
         }
 
         private async void FormatResponse(HttpResponse response)

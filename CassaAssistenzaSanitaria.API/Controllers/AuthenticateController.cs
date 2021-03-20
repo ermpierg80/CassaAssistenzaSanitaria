@@ -34,7 +34,6 @@ namespace CassaAssistenzaSanitaria.API.Controllers
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
             log.Info("TEST!!!");
-            model = JsonSerializer.Deserialize<LoginModel>(HttpContext.Items["Body"].ToString());
 
             if (model != null)
             {
