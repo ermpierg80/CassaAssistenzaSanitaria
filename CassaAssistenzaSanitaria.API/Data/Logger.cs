@@ -29,6 +29,18 @@ namespace CassaAssistenzaSanitaria.API.Data
             _log.Info(message);
         }
 
+        public static void Warn(object message)
+        {
+            SetLog4NetConfiguration();
+            _log.Warn(message);
+        }
+
+        public static void Error(object message)
+        {
+            SetLog4NetConfiguration();
+            _log.Error(message);
+        }
+
         private static void SetLog4NetConfiguration()
         {
             XmlDocument log4netConfig = new XmlDocument();

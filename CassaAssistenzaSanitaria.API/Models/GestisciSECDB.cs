@@ -7,11 +7,14 @@ using System.Security.Claims;
 using System.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
+using log4net;
 
 namespace CassaAssistenzaSanitaria.API.Models
 {
     public class GestisciSECDB
     {
+        public static ILog Log { get; } = Logger.GetLogger(typeof(GestisciSECDB));
+
         public static void Initialize(IServiceProvider serviceProvider)
         {
             var context = serviceProvider.GetRequiredService<CassaAssistenzaSECDbContext>();
@@ -60,6 +63,7 @@ namespace CassaAssistenzaSanitaria.API.Models
             }
             catch(Exception e)
             {
+                Log.Error(e.ToString());
                 throw new Exception(e.Message, e.InnerException);
             }
         }
@@ -83,6 +87,7 @@ namespace CassaAssistenzaSanitaria.API.Models
             }
             catch (Exception e)
             {
+                Log.Error(e.ToString());
                 throw new Exception(e.Message, e.InnerException);
             }
         }
@@ -101,8 +106,9 @@ namespace CassaAssistenzaSanitaria.API.Models
                 }
                 return Roles;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
+                Log.Error(e.ToString());
                 throw new Exception(e.Message, e.InnerException);
             }
         }

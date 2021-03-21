@@ -25,7 +25,7 @@ namespace CassaAssistenzaSanitaria.API.Controllers
 
         public AuthenticateController(UserManager<ApplicationUser> userManager)
         {
-            this.log = Logger.GetLogger(typeof(AuthenticateController));
+            log = Logger.GetLogger(typeof(AuthenticateController));
             this.userManager = userManager;
         }
 
@@ -33,8 +33,6 @@ namespace CassaAssistenzaSanitaria.API.Controllers
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
-            log.Info("TEST!!!");
-
             if (model != null)
             {
                 var user = await userManager.FindByNameAsync(model.Username);

@@ -1,10 +1,7 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace CassaAssistenzaSanitaria.API.Data
 {
@@ -15,7 +12,7 @@ namespace CassaAssistenzaSanitaria.API.Data
 
         public RequestResponseLogging(RequestDelegate next)
         {
-            this.log = Logger.GetLogger(typeof(RequestResponseLogging)); 
+            log = Logger.GetLogger(typeof(RequestResponseLogging));
             _next = next;
         }
 
@@ -49,10 +46,10 @@ namespace CassaAssistenzaSanitaria.API.Data
             string bodyAsText = await GetRequestBodyAsync(request);
 
             //Log the request...
-            this.log.Info($"{request.Scheme} {request.Host}{request.Path} {request.QueryString} {bodyAsText}");
+            //log.Info($"{request.Scheme} {request.Host}{request.Path} {request.QueryString} {bodyAsText}");
             foreach (var header in request.Headers)
             {
-                this.log.Info("header(" + header.Key + "): " + header.Value);
+                log.Info("header(" + header.Key + "): " + header.Value);
             }
         }
 
@@ -87,7 +84,7 @@ namespace CassaAssistenzaSanitaria.API.Data
             response.Body.Seek(0, SeekOrigin.Begin);
 
             //Log the response...
-            this.log.Info($"{response.StatusCode}: {text}");
+            log.Info($"{response.StatusCode}: {text}");
         }
     }
 }

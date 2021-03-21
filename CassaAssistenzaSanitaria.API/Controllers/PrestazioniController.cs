@@ -21,9 +21,9 @@ namespace CassaAssistenzaSanitaria.API.Controllers
 
         public PrestazioniController(IConfiguration IConf)
         {
-            this.log = Logger.GetLogger(typeof(PrestazioniController));
-            this.Configuration = IConf;
-            this.CassaAssistenzaDB = new GestisciADMDB(this.Configuration);
+            log = Logger.GetLogger(typeof(PrestazioniController));
+            Configuration = IConf;
+            CassaAssistenzaDB = new GestisciADMDB(Configuration);
         }
 
         // GET: api/values
