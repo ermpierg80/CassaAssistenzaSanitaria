@@ -46,7 +46,7 @@ namespace CassaAssistenzaSanitaria.API.Data
             string bodyAsText = await GetRequestBodyAsync(request);
 
             //Log the request...
-            //log.Info($"{request.Scheme} {request.Host}{request.Path} {request.QueryString} {bodyAsText}");
+            log.Info($"{request.Scheme} {request.Host}{request.Path} {request.QueryString} {bodyAsText}");
             foreach (var header in request.Headers)
             {
                 log.Info("header(" + header.Key + "): " + header.Value);
