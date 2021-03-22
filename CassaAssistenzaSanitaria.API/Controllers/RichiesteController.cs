@@ -29,38 +29,84 @@ namespace CassaAssistenzaSanitaria.API.Controllers
         // GET: api/values
         [Authorize(Roles = "Admin, User")]
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<Richiesta> Get()
         {
-            return new string[] { "value1", "value2" };
+            try
+            {
+                return CassaAssistenzaDB.GetRichieste((User.IsInRole("Admin") ? "*" : GestisciSECDB.RetrieveCodiceFiscale(Configuration, User)));
+            }
+            catch (Exception e)
+            {
+                this.log.Error(e.ToString());
+                return null;
+            }
         }
 
         // GET api/values/5
         [Authorize(Roles = "Admin, User")]
         [HttpGet("{id}")]
-        public string Get(int id)
+        public Richiesta Get(int id)
         {
-            return "value";
+            try
+            {
+                return CassaAssistenzaDB.GetRichiesta(id, (User.IsInRole("Admin") ? "*" : GestisciSECDB.RetrieveCodiceFiscale(Configuration, User)));
+            }
+            catch (Exception e)
+            {
+                this.log.Error(e.ToString());
+                return null;
+            }
         }
 
         // POST api/values
         [Authorize(Roles = "Admin, User")]
         [HttpPost]
-        public void Post([FromBody] string value)
+        public void Post([FromBody] RichiestaModel richiesta)
         {
+            try
+            {
+                CassaAssistenzaDB.AddRichiesta(richiesta, (User.IsInRole("Admin") ? "*" : GestisciSECDB.RetrieveCodiceFiscale(Configuration, User)));
+            }
+            catch (Exception e)
+            {
+                this.log.Error(e.ToString());
+            }
         }
 
         // PUT api/values/5
         [Authorize(Roles = "Admin, User")]
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public void Put(int id, [FromBody] RichiestaModel value)
         {
+            try
+            {
+                if (id > 0 && value != null)
+                {
+                    CassaAssistenzaDB.UpdRichieste(id, value, (User.IsInRole("Admin") ? "*" : GestisciSECDB.RetrieveCodiceFiscale(Configuration, User)));
+                }
+            }
+            catch (Exception e)
+            {
+                this.log.Error(e.ToString());
+            }
         }
 
         // DELETE api/values/5
-        [Authorize(Roles = "Admin, User")]
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+            try
+            {
+                if (id > 0)
+                {
+                    CassaAssistenzaDB.DelRichieste(id);
+                }
+            }
+            catch (Exception e)
+            {
+                this.log.Error(e.ToString());
+            }
         }
     }
 }

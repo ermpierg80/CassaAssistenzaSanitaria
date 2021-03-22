@@ -23,6 +23,7 @@ namespace CassaAssistenzaSanitaria.API.Models
         public DateTime DataFattura { get; set; }
 	    public DateTime DataRichiesta { get; set; }
         public DateTime DataConferma { get; set; }
+        public DateTime DataCancellazione { get; set; }
 
         public override string ToString()
         {

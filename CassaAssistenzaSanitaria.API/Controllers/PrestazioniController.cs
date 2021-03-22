@@ -29,31 +29,76 @@ namespace CassaAssistenzaSanitaria.API.Controllers
         // GET: api/values
         [Authorize(Roles = "Admin, User")]
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<Prestazione> Get()
         {
-            return new string[] { "value1", "value2" };
+            try
+            {
+                return CassaAssistenzaDB.GetPrestazioni();
+            }
+            catch (Exception e)
+            {
+                this.log.Error(e.ToString());
+                return null;
+            }
         }
 
         // GET api/values/5
         [Authorize(Roles = "Admin, User")]
         [HttpGet("{id}")]
-        public string Get(int id)
+        public Prestazione Get(int id)
         {
-            return "value";
+            try
+            {
+                if (id > 0)
+                {
+                    return CassaAssistenzaDB.GetPrestazione(id);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception e)
+            {
+                this.log.Error(e.ToString());
+                return null;
+            }
         }
 
         // POST api/values
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public void Post([FromBody] string value)
+        public void Post([FromBody] PrestazioneModel value)
         {
+            try
+            {
+                if (value != null)
+                {
+                    CassaAssistenzaDB.AddPrestazione(value);
+                }
+            }
+            catch (Exception e)
+            {
+                this.log.Error(e.ToString());
+            }
         }
 
         // PUT api/values/5
         [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public void Put(int id, [FromBody] PrestazioneModel value)
         {
+            try
+            {
+                if (id > 0 && value != null)
+                {
+                    CassaAssistenzaDB.UpdPrestazione(id, value);
+                }
+            }
+            catch (Exception e)
+            {
+                this.log.Error(e.ToString());
+            }
         }
 
         // DELETE api/values/5
@@ -61,6 +106,17 @@ namespace CassaAssistenzaSanitaria.API.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+            try
+            {
+                if (id > 0)
+                {
+                    CassaAssistenzaDB.DelPrestazione(id);
+                }
+            }
+            catch (Exception e)
+            {
+                this.log.Error(e.ToString());
+            }
         }
     }
 }
