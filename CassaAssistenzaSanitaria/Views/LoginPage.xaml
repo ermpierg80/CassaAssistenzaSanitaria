@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="CassaAssistenzaSanitaria.Views.LoginPage"
+    xmlns:vm="clr-namespace:CassaAssistenzaSanitaria.ViewModels"
+    Title="{Binding Title}">
+
+    <ContentPage.BindingContext>
+        <vm:LoginViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Content>
+        <StackLayout Spacing="20" Padding="15">
+            <Label Text="{Binding Title}" HorizontalTextAlignment="Center" FontSize="Medium" />
+            <Label Text="Username:" FontSize="Medium" />
+            <Entry Text="{Binding Login.Username}" FontSize="Small"/>
+            <Label Text="Password:" FontSize="Medium" />
+            <Entry Text="{Binding Login.Password}" IsPassword="True" FontSize="Small"/>
+            <Grid ColumnDefinitions="*,*">
+                <Button Text="Cancel"
+                        Clicked="Cancel_Clicked" />
+                <Button Grid.Column="1"
+                        Text="Submit"
+                        Clicked="Submit_Clicked"/>
+            </Grid>
+            <Label Text="{Binding LoginToken}" FontSize="Micro" />
+        </StackLayout>
+    </ContentPage.Content>  
+
+</ContentPage>

@@ -47,8 +47,8 @@ namespace CassaAssistenzaSanitaria.API.Controllers
         {
             try
             {
-                return CassaAssistenzaDB.GetIscritto(id,
-                (User.IsInRole("Admin") ? "*" : GestisciSECDB.RetrieveCodiceFiscale(Configuration, User)));
+                return CassaAssistenzaDB.GetIscritto((User.IsInRole("Admin") ? id : 0),
+                ((User.IsInRole("Admin") && (id != 0)) ? "*" : GestisciSECDB.RetrieveCodiceFiscale(Configuration, User)));
             }
             catch (Exception e)
             {

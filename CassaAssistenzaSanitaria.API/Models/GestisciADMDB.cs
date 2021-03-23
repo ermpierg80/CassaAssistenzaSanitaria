@@ -94,7 +94,7 @@ namespace CassaAssistenzaSanitaria.API.Models
                 using (CassaAssistenzaSanitaria.API.Models.CassaAssistenzaADMDbContext context = new CassaAssistenzaSanitaria.API.Models.CassaAssistenzaADMDbContext(Configuration.GetConnectionString("ADMConnection")))
                 {
                     var query = from t in context.Iscritti
-                                where t.Id == id && (t.CodiceFiscale == codiceFiscale || codiceFiscale == "*")
+                                where (t.Id == id || id == 0) && (t.CodiceFiscale == codiceFiscale || codiceFiscale == "*")
                                 select t;
 
                     foreach (var t in query)
@@ -420,7 +420,7 @@ namespace CassaAssistenzaSanitaria.API.Models
                 using (CassaAssistenzaSanitaria.API.Models.CassaAssistenzaADMDbContext context = new CassaAssistenzaSanitaria.API.Models.CassaAssistenzaADMDbContext(Configuration.GetConnectionString("ADMConnection")))
                 {
                     var recordRichiedente = context.Iscritti.FirstOrDefault<Iscritto>(item => item.Id.Equals(int.Parse(richiesta.IdRichiedente)) && (item.CodiceFiscale == codiceFiscale || codiceFiscale == "*"));
-                    var recordRichiesta = context.Richieste.FirstOrDefault<Richiesta>(item => item.Id.Equals(id));
+                    var recordRichiesta = context.Richieste.FirstOrDefault<Richiesta>(item => item.Id.Equals(id) && (item.Richiedente.CodiceFiscale == codiceFiscale || codiceFiscale == "*"));
 
                     if (recordRichiedente != null && recordRichiesta != null)
                     {
