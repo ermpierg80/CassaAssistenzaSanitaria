@@ -12,8 +12,9 @@ namespace CassaAssistenzaSanitaria.ViewModels
 {
     public class LoginViewModel : CABaseViewModel
     {
-        private string loginToken;
         private Login login;
+        private Iscritto iscritto;
+        private string benvenuto;
 
         public LoginViewModel()
         {
@@ -23,27 +24,52 @@ namespace CassaAssistenzaSanitaria.ViewModels
                 Username = "ErmPierg",
                 Password = "Test@123"
             };
-            LoginToken = "";
+            Benvenuto = "";
+            IscrittoAssociazione = null;
             MessagingCenter.Subscribe<LoginPage>(this, "LoginToken", async (obj) =>
             {
-                LoginToken = await DataStore.LoginTokenAsync(login);
+                var LoginToken = await DataStore.LoginTokenAsync(login);
+                if (!String.IsNullOrEmpty(LoginToken))
+                {
+                    IscrittoAssociazione = await DataStore.GetIscrittoAsync();
+                    if (IscrittoAssociazione != null)
+                    {
+                        Benvenuto = "Benvenuto " + IscrittoAssociazione.Nome + " " + IscrittoAssociazione.Cognome + "!";
+                    }
+                    else
+                    {
+                        Benvenuto = "Benvenuto sconosciuto";
+                    }
+                }
+                else
+                {
+                    Benvenuto = "Autenticazione fallita";
+                }
+
             });
             MessagingCenter.Subscribe<LoginPage>(this, "RemoveToken", async (obj) =>
             {
-                LoginToken = "";
+                IscrittoAssociazione = null;
+                Benvenuto = "";
             });
         }
 
-        public string LoginToken
+        public Iscritto IscrittoAssociazione
         {
-            get { return loginToken; }
-            set { SetProperty(ref loginToken, value); }
+            get { return iscritto; }
+            set { SetProperty(ref iscritto, value); }
         }
 
         public Login Login
         {
             get { return login; }
             set { SetProperty(ref login, value); }
+        }
+
+        public string Benvenuto
+        {
+            get { return benvenuto; }
+            set { SetProperty(ref benvenuto, value); }
         }
 
     }

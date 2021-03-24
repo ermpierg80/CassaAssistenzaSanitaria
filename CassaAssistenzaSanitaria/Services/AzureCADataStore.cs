@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Xamarin.Essentials;
 using CassaAssistenzaSanitaria.Models;
 using System.Net.Http.Headers;
-using System.Net;
+using System.Text.Json;
 
 namespace CassaAssistenzaSanitaria.Services
 {
@@ -37,9 +36,32 @@ namespace CassaAssistenzaSanitaria.Services
             throw new NotImplementedException();
         }
 
-        public Task<Iscritto> GetIscrittoAsync(int id)
+        public async Task<Iscritto> GetIscrittoAsync()
         {
-            throw new NotImplementedException();
+            Iscritto iscritto = null;
+            try
+            {
+                if (!string.IsNullOrEmpty(loginToken))
+                {
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", loginToken);
+                    var response = client.GetAsync(@"/api/Iscritti/0").Result;
+                    var output_response = await response.Content.ReadAsStringAsync();
+
+                    if (!string.IsNullOrEmpty(output_response))
+                    {
+                        var options = new JsonSerializerOptions
+                        {
+                            PropertyNameCaseInsensitive = true,
+                        };
+                        iscritto = System.Text.Json.JsonSerializer.Deserialize<Iscritto>(output_response, options);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message, e.InnerException);
+            }
+            return iscritto;
         }
 
         public Task<IEnumerable<Prestazione>> GetPrestazioniAsync(bool forceRefresh = false)
@@ -59,13 +81,19 @@ namespace CassaAssistenzaSanitaria.Services
 
         public async Task<string> LoginTokenAsync(Login login)
         {
+            loginToken = null;
             if (login != null && login.Username != null && login.Password != null && IsConnected)
             {
                 var serializedItem = JsonConvert.SerializeObject(login);
                 try
                 {
                     var response = client.PostAsync($"api/Authenticate/login", new StringContent(JsonConvert.SerializeObject(login), System.Text.Encoding.UTF8, "application/json")).Result;
-                    loginToken = await response.Content.ReadAsStringAsync();
+                    var output_response = await response.Content.ReadAsStringAsync();
+
+                    if (!string.IsNullOrEmpty(output_response))
+                    {
+                        loginToken = System.Text.Json.JsonSerializer.Deserialize<Autenticazione>(output_response).token;
+                    }
                 }
                 catch (Exception e)
                 {
