@@ -2,17 +2,14 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-
-using Xamarin.Forms;
-
-using CassaAssistenzaSanitaria.Models;
 using CassaAssistenzaSanitaria.Services;
+using Xamarin.Forms;
 
 namespace CassaAssistenzaSanitaria.ViewModels
 {
-    public class BaseViewModel : INotifyPropertyChanged
+    public class CABaseViewModel : INotifyPropertyChanged
     {
-        public IDataStore<Item> DataStore => DependencyService.Get<IDataStore<Item>>();
+        public DataStore DataStore => DependencyService.Get<DataStore>();
 
         bool isBusy = false;
         public bool IsBusy

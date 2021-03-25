@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using CassaAssistenzaSanitaria.Models;
 using Xamarin.Forms;
+using CassaAssistenzaSanitaria.Services;
 
 namespace CassaAssistenzaSanitaria.Views
 {
@@ -12,14 +13,17 @@ namespace CassaAssistenzaSanitaria.Views
             InitializeComponent();
         }
 
-        async void Submit_Clicked(object sender, EventArgs e)
+        void Submit_Clicked(object sender, EventArgs e)
         {
             MessagingCenter.Send(this, "LoginToken");
         }
 
-        async void Cancel_Clicked(object sender, EventArgs e)
+        void Cancel_Clicked(object sender, EventArgs e)
         {
             MessagingCenter.Send(this, "RemoveToken");
+
+            var closer = DependencyService.Get<ICloseApplication>();
+            closer?.closeApplication();
         }
     }
 }
