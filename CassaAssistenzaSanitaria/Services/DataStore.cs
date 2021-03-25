@@ -5,9 +5,9 @@ using CassaAssistenzaSanitaria.Models;
 
 namespace CassaAssistenzaSanitaria.Services
 {
-    public interface CADataStore
+    public interface DataStore
     {
-        Task<string> LoginTokenAsync(Login login);
+        Task<bool> LoginTokenAsync(Login login);
         Task<Iscritto> GetIscrittoAsync();
 
         Task<IEnumerable<Prestazione>> GetPrestazioniAsync(bool forceRefresh = false);

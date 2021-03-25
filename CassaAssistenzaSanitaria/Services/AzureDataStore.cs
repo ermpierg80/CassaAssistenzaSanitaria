@@ -1,84 +1,118 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Xamarin.Essentials;
 using CassaAssistenzaSanitaria.Models;
+using System.Net.Http.Headers;
+using System.Text.Json;
 
 namespace CassaAssistenzaSanitaria.Services
 {
-    public class AzureDataStore : IDataStore<Item>
+    public class AzureDataStore : DataStore
     {
         HttpClient client;
-        IEnumerable<Item> items;
+        IEnumerable<Richiesta> richieste;
+        IEnumerable<Prestazione> prestazioni;
+        Iscritto iscritto;
+        string loginToken;
+        bool IsConnected => Connectivity.NetworkAccess == NetworkAccess.Internet;
 
         public AzureDataStore()
         {
             client = new HttpClient();
             client.BaseAddress = new Uri($"{App.AzureBackendUrl}/");
+            //System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            //client.DefaultRequestHeaders.Accept.Clear();
+            //client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            items = new List<Item>();
+            richieste = new List<Richiesta>();
+            prestazioni = new List<Prestazione>();
         }
 
-        bool IsConnected => Connectivity.NetworkAccess == NetworkAccess.Internet;
-        public async Task<IEnumerable<Item>> GetItemsAsync(bool forceRefresh = false)
+        public Task<bool> AddRichiestaAsync(Richiesta richiesta)
         {
-            if (forceRefresh && IsConnected)
+            throw new NotImplementedException();
+        }
+
+        public async Task<Iscritto> GetIscrittoAsync()
+        {
+            Iscritto iscritto = null;
+            try
             {
-                var json = await client.GetStringAsync($"api/item");
-                items = await Task.Run(() => JsonConvert.DeserializeObject<IEnumerable<Item>>(json));
+                if (!string.IsNullOrEmpty(loginToken))
+                {
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", loginToken);
+                    var response = client.GetAsync(@"/api/Iscritti/0").Result;
+                    var output_response = await response.Content.ReadAsStringAsync();
+
+                    if (!string.IsNullOrEmpty(output_response))
+                    {
+                        var options = new JsonSerializerOptions
+                        {
+                            PropertyNameCaseInsensitive = true,
+                        };
+                        iscritto = System.Text.Json.JsonSerializer.Deserialize<Iscritto>(output_response, options);
+                    }
+                }
             }
-
-            return items;
-        }
-
-        public async Task<Item> GetItemAsync(string id)
-        {
-            if (id != null && IsConnected)
+            catch (Exception e)
             {
-                var json = await client.GetStringAsync($"api/item/{id}");
-                return await Task.Run(() => JsonConvert.DeserializeObject<Item>(json));
+                throw new Exception(e.Message, e.InnerException);
             }
-
-            return null;
+            return iscritto;
         }
 
-        public async Task<bool> AddItemAsync(Item item)
+        public Task<IEnumerable<Prestazione>> GetPrestazioniAsync(bool forceRefresh = false)
         {
-            if (item == null || !IsConnected)
-                return false;
-
-            var serializedItem = JsonConvert.SerializeObject(item);
-
-            var response = await client.PostAsync($"api/item", new StringContent(serializedItem, Encoding.UTF8, "application/json"));
-
-            return response.IsSuccessStatusCode;
+            throw new NotImplementedException();
         }
 
-        public async Task<bool> UpdateItemAsync(Item item)
+        public Task<Richiesta> GetRichiestaAsync(int id)
         {
-            if (item == null || item.Id == null || !IsConnected)
-                return false;
-
-            var serializedItem = JsonConvert.SerializeObject(item);
-            var buffer = Encoding.UTF8.GetBytes(serializedItem);
-            var byteContent = new ByteArrayContent(buffer);
-
-            var response = await client.PutAsync(new Uri($"api/item/{item.Id}"), byteContent);
-
-            return response.IsSuccessStatusCode;
+            throw new NotImplementedException();
         }
 
-        public async Task<bool> DeleteItemAsync(string id)
+        public Task<IEnumerable<Richiesta>> GetRichiesteAsync(bool forceRefresh = false)
         {
-            if (string.IsNullOrEmpty(id) && !IsConnected)
-                return false;
-
-            var response = await client.DeleteAsync($"api/item/{id}");
-
-            return response.IsSuccessStatusCode;
+            throw new NotImplementedException();
         }
+
+        public async Task<bool> LoginTokenAsync(Login login)
+        {
+            bool output = false;
+            loginToken = null;
+            if (login != null && login.Username != null && login.Password != null && IsConnected)
+            {
+                var serializedItem = JsonConvert.SerializeObject(login);
+                try
+                {
+                    var response = client.PostAsync($"api/Authenticate/login", new StringContent(JsonConvert.SerializeObject(login), System.Text.Encoding.UTF8, "application/json")).Result;
+                    var output_response = await response.Content.ReadAsStringAsync();
+
+                    if (!string.IsNullOrEmpty(output_response))
+                    {
+                        loginToken = System.Text.Json.JsonSerializer.Deserialize<Autenticazione>(output_response).token;
+                        if (!string.IsNullOrEmpty(loginToken))
+                        {
+                            output = true;
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    throw new Exception(e.Message, e.InnerException);
+                }
+            }
+            return output;
+        }
+
+        public Task<bool> UpdateRichiestaAsync(Richiesta richiesta)
+        {
+            throw new NotImplementedException();
+        }
+
+
     }
 }

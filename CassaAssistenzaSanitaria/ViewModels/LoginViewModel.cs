@@ -28,8 +28,8 @@ namespace CassaAssistenzaSanitaria.ViewModels
             IscrittoAssociazione = null;
             MessagingCenter.Subscribe<LoginPage>(this, "LoginToken", async (obj) =>
             {
-                var LoginToken = await DataStore.LoginTokenAsync(login);
-                if (!String.IsNullOrEmpty(LoginToken))
+                bool esito = await DataStore.LoginTokenAsync(login);
+                if (esito)
                 {
                     IscrittoAssociazione = await DataStore.GetIscrittoAsync();
                     if (IscrittoAssociazione != null)
@@ -38,7 +38,7 @@ namespace CassaAssistenzaSanitaria.ViewModels
                     }
                     else
                     {
-                        Benvenuto = "Benvenuto sconosciuto";
+                        Benvenuto = "Privilegi insufficienti per operare, l'utenza spesa per la login non è un iscritto al servizio!";
                     }
                 }
                 else
