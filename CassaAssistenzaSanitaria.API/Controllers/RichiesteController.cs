@@ -29,7 +29,7 @@ namespace CassaAssistenzaSanitaria.API.Controllers
         // GET: api/values
         [Authorize(Roles = "Admin, User")]
         [HttpGet]
-        public IEnumerable<Richiesta> Get()
+        public IEnumerable<RichiestaOutput> Get()
         {
             try
             {

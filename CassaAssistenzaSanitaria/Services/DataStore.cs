@@ -10,11 +10,11 @@ namespace CassaAssistenzaSanitaria.Services
         Task<bool> LoginTokenAsync(Login login);
         Task<Iscritto> GetIscrittoAsync();
 
-        Task<IEnumerable<Prestazione>> GetPrestazioniAsync(bool forceRefresh = false);
+        Task<IEnumerable<Prestazione>> GetPrestazioniAsync();
 
-        Task<bool> AddRichiestaAsync(Richiesta richiesta);
-        Task<bool> UpdateRichiestaAsync(Richiesta richiesta);
+        bool AddRichiestaAsync(Richiesta richiesta);
+        bool UpdateRichiestaAsync(Richiesta richiesta);
         Task<Richiesta> GetRichiestaAsync(int id);
-        Task<IEnumerable<Richiesta>> GetRichiesteAsync(bool forceRefresh = false);
+        Task<IEnumerable<Richiesta>> GetRichiesteAsync();
     }
 }

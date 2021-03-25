@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CassaAssistenzaSanitaria.Views.ElencoPage"
+             xmlns:vm="clr-namespace:CassaAssistenzaSanitaria.ViewModels"
+             Title="{Binding Title}">
+
+  <ContentPage.BindingContext>
+        <vm:ElencoViewModel />
+  </ContentPage.BindingContext>
+
+  <ListView x:Name="MyListView"
+            ItemsSource="{Binding Mostrarichieste}"
+            ItemTapped="Handle_ItemTapped"
+            CachingStrategy="RecycleElement">
+            
+    <ListView.ItemTemplate>
+        <DataTemplate>
+          <ViewCell>
+              <StackLayout HorizontalOptions="FillAndExpand">
+                <Label Text="{Binding id}" IsVisible="false" />
+                <Label Text="{Binding prestazione}" FontSize="Small"/>
+                <Label Text="{Binding fattura}" FontSize="Small" />
+              </StackLayout>
+          </ViewCell>
+        </DataTemplate>
+    </ListView.ItemTemplate>
+
+  </ListView>
+</ContentPage>

@@ -24,7 +24,7 @@
                         Text="Submit"
                         Clicked="Submit_Clicked"/>
             </Grid>
-            <Label Text="{Binding Benvenuto}" FontSize="Micro" TextColor="Red" HorizontalTextAlignment="Center"/>
+            <Label x:Name="Benvenuto" Text="{Binding Benvenuto}" FontSize="Micro" TextColor="Red" HorizontalTextAlignment="Center"/>
         </StackLayout>
     </ContentPage.Content>  
 

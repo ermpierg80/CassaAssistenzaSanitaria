@@ -7,7 +7,7 @@ using Xamarin.Forms;
 
 namespace CassaAssistenzaSanitaria.ViewModels
 {
-    public class CABaseViewModel : INotifyPropertyChanged
+    public class BaseViewModel : INotifyPropertyChanged
     {
         public DataStore DataStore => DependencyService.Get<DataStore>();
 

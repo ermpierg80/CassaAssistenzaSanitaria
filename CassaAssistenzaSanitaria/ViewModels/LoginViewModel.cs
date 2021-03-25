@@ -10,7 +10,7 @@ using CassaAssistenzaSanitaria.Views;
 
 namespace CassaAssistenzaSanitaria.ViewModels
 {
-    public class LoginViewModel : CABaseViewModel
+    public class LoginViewModel : BaseViewModel
     {
         private Login login;
         private Iscritto iscritto;
@@ -45,12 +45,6 @@ namespace CassaAssistenzaSanitaria.ViewModels
                 {
                     Benvenuto = "Autenticazione fallita";
                 }
-
-            });
-            MessagingCenter.Subscribe<LoginPage>(this, "RemoveToken", async (obj) =>
-            {
-                IscrittoAssociazione = null;
-                Benvenuto = "";
             });
         }
 

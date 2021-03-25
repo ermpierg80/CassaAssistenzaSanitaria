@@ -319,27 +319,41 @@ namespace CassaAssistenzaSanitaria.API.Models
             }
         }
 
-        public List<Richiesta> GetRichieste(string codiceFiscale)
+        public List<RichiestaOutput> GetRichieste(string codiceFiscale)
         {
-            List<Richiesta> richieste = null;
+            List<RichiestaOutput> richieste = null;
 
             try
             {
                 using (CassaAssistenzaSanitaria.API.Models.CassaAssistenzaADMDbContext context = new CassaAssistenzaSanitaria.API.Models.CassaAssistenzaADMDbContext(Configuration.GetConnectionString("ADMConnection")))
                 {
-                    var query = from t in context.Richieste
+                    var query = from t in context.Richieste.Include("Tipologia").Include("Richiedente")
                                 where t.DataRichiesta.Year > 1 && t.DataCancellazione.Year == 1 && (t.Richiedente.CodiceFiscale == codiceFiscale || codiceFiscale == "*")
                                 select t;
 
                     if (query.Count<Richiesta>() > 0)
                     {
-                        richieste = new List<Richiesta>();
+                        richieste = new List<RichiestaOutput>();
 
                         foreach (var t in query)
                         {
                             if (t != null)
                             {
-                                richieste.Add(t);
+                                richieste.Add(new RichiestaOutput(){
+                                    Id = t.Id,
+                                    NumeroFattura = t.NumeroFattura,
+                                    IdRichiedente = t.Richiedente.Id,
+                                    IdTipologia = t.Tipologia.Id,
+                                    Note = t.Note,
+                                    ImportoFattura = t.ImportoFattura,
+                                    ImportoRimborsatoDaTerzi = t.ImportoRimborsatoDaTerzi,
+                                    ImportoDaRimborsare = t.ImportoDaRimborsare,
+                                    ImportoACarico = t.ImportoACarico,
+                                    DataRichiesta = t.DataRichiesta,
+                                    DataFattura = t.DataFattura,
+                                    DataConferma = t.DataConferma,
+                                    DataCancellazione = t.DataCancellazione
+                                });
                             }
                         }
                     }
