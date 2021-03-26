@@ -10,6 +10,10 @@
         <vm:LoginViewModel />
     </ContentPage.BindingContext>
 
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Cambia" Command="{Binding ChangePwd}" />
+    </ContentPage.ToolbarItems>
+
     <ContentPage.Content>
         <StackLayout Spacing="20" Padding="15">
             <Label Text="Username:" FontSize="Medium" />
@@ -17,13 +21,13 @@
             <Label Text="Password:" FontSize="Medium" />
             <Entry Text="{Binding Login.Password}" IsPassword="True" FontSize="Small"/>
             <Grid ColumnDefinitions="*,*">
-                <Button Text="Cancel"
+                <Button Text="Esci"
                         Clicked="Cancel_Clicked" />
                 <Button Grid.Column="1"
-                        Text="Submit"
+                        Text="Entra"
                         Clicked="Submit_Clicked"/>
             </Grid>
-            <Label x:Name="Benvenuto" Text="{Binding Benvenuto}" FontSize="Micro" TextColor="Red" HorizontalTextAlignment="Center"/>
+            <Label x:Name="Benvenuto" Text="{Binding Benvenuto}" FontSize="Small" TextColor="Red" HorizontalTextAlignment="Center"/>
         </StackLayout>
     </ContentPage.Content>  
 

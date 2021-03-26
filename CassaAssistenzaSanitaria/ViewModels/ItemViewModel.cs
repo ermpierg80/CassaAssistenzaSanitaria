@@ -17,7 +17,6 @@ namespace CassaAssistenzaSanitaria.ViewModels
 
         public HealtCareItem Item { get; set; }
         public List<Prestazione> Prestazioni { get; set; }
-        public bool NotIsNew { get; set; }
 
         public ItemViewModel(HealtCareItemRepository repository)
         {
@@ -53,15 +52,6 @@ namespace CassaAssistenzaSanitaria.ViewModels
                 RaisePropertyChanged(nameof(Item)); 
             });
 
-            if (Item.Id == 0)
-            {
-                NotIsNew = false;
-            }
-            else
-            {
-                NotIsNew = true;
-            }
-            RaisePropertyChanged(nameof(NotIsNew));
         }
 
         public ICommand Save => new Command(async () =>

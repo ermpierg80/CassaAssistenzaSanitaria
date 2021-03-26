@@ -14,6 +14,11 @@ namespace CassaAssistenzaSanitaria.Views
         public LoginPage()
         {
             InitializeComponent();
+
+            MessagingCenter.Subscribe<LoginViewModel>(this, "ChangePage", async (obj) =>
+            {
+                await Navigation.PushAsync(new ChangePwd(new ChangePwdModel()));
+            });
         }
 
         async void Submit_Clicked(object sender, EventArgs e)

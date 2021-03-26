@@ -8,6 +8,7 @@ namespace CassaAssistenzaSanitaria.Services
     public interface DataStore
     {
         Task<bool> LoginTokenAsync(Login login);
+        Task<bool> LoginChangeAsync(ChangeLogin login);
         Task<Iscritto> GetIscrittoAsync(bool forceRefresh = false);
 
         Task<IEnumerable<Prestazione>> GetPrestazioniAsync();

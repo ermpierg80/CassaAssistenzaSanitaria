@@ -173,7 +173,7 @@ namespace CassaAssistenzaSanitaria.Services
         {
             bool output = false;
             loginToken = null;
-            if (login != null && login.Username != null && login.Password != null && IsConnected)
+            if (login != null && !string.IsNullOrEmpty(login.Username) && !string.IsNullOrEmpty(login.Password) && IsConnected)
             {
                 try
                 {
@@ -218,6 +218,33 @@ namespace CassaAssistenzaSanitaria.Services
                 throw new Exception(e.Message, e.InnerException);
             }
             return esito;
+        }
+
+        public async Task<bool> LoginChangeAsync(ChangeLogin login)
+        {
+            bool output = false;
+            if (login != null && !string.IsNullOrEmpty(login.Username)
+                && !string.IsNullOrEmpty(login.OldPassword) && !string.IsNullOrEmpty(login.NewPassword) && IsConnected)
+            {
+                try
+                {
+                    var response = client.PutAsync($"api/Authenticate", new StringContent(JsonConvert.SerializeObject(login), System.Text.Encoding.UTF8, "application/json")).Result;
+                    var output_response = await response.Content.ReadAsStringAsync();
+
+                    if (!string.IsNullOrEmpty(output_response))
+                    {
+                        if (bool.Parse(output_response))
+                        {
+                            output = true;
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    throw new Exception(e.Message, e.InnerException);
+                }
+            }
+            return output; 
         }
     }
 }

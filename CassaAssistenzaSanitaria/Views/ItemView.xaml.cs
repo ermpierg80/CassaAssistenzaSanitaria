@@ -34,5 +34,11 @@ namespace CassaAssistenzaSanitaria.Views
                 MessagingCenter.Send(this, "TipologiaPrestazioneSelezionata", ((Prestazione)picker.SelectedItem).Id);
             }
         }
+
+        void Importo_TextChanged(System.Object sender, Xamarin.Forms.TextChangedEventArgs e)
+        {
+            var entry = (Entry)sender;
+            entry.Text = entry.Text.Replace(",", ".");
+        }
     }
 }

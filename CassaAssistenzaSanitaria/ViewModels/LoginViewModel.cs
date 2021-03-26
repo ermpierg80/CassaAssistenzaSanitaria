@@ -7,6 +7,8 @@ using Xamarin.Forms;
 
 using CassaAssistenzaSanitaria.Models;
 using CassaAssistenzaSanitaria.Views;
+using System.Windows.Input;
+using CassaAssistenzaSanitaria.Repositories;
 
 namespace CassaAssistenzaSanitaria.ViewModels
 {
@@ -65,6 +67,11 @@ namespace CassaAssistenzaSanitaria.ViewModels
             get { return benvenuto; }
             set { benvenuto = value; RaisePropertyChanged(nameof(Benvenuto)); }
         }
+
+        public ICommand ChangePwd => new Command(() =>
+        {
+            MessagingCenter.Send(this, "ChangePage");
+        });
 
     }
 }

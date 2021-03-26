@@ -15,9 +15,9 @@
             <Label Text="Data Fattura" />
             <DatePicker Date="{Binding Item.DataFattura}" Format="dd/MM/yyyy" />
             <Label Text="Importo Fattura" />
-            <Entry x:Name="ImportoFattura" Text="{Binding Item.ImportoFattura}" />
+            <Entry x:Name="ImportoFattura" Text="{Binding Item.ImportoFattura}" Keyboard="Numeric" TextChanged="Importo_TextChanged" />
             <Label Text="Importo Rimborsato da Terzi" />
-            <Entry x:Name="ImportoRimborsatoDaTerzi" Text="{Binding Item.ImportoRimborsatoDaTerzi}" />
+            <Entry x:Name="ImportoRimborsatoDaTerzi" Text="{Binding Item.ImportoRimborsatoDaTerzi}" Keyboard="Numeric" TextChanged="Importo_TextChanged" />
             <Label Text="Prestazione" />
             <Picker Title="seleziona tipologia di prestazione"
                     ItemsSource="{Binding Prestazioni}"
@@ -26,11 +26,11 @@
                     SelectedIndexChanged="Picker_BindingContextChanged">
             </Picker>
             <Label Text="Importo Rimasto a Carico" />
-            <Entry Text="{Binding Item.ImportoACarico}"  />
+            <Entry Text="{Binding Item.ImportoACarico}" Keyboard="Numeric" TextChanged="Importo_TextChanged" />
             <Label Text="Importo Da Rimborsare" />
-            <Entry Text="{Binding Item.ImportoDaRimborsare}"  />
+            <Entry Text="{Binding Item.ImportoDaRimborsare}" Keyboard="Numeric" TextChanged="Importo_TextChanged" />
             <Label Text="Note" />
-            <Editor Text="{Binding Item.Note}"/>
+            <Editor Text="{Binding Item.Note}" />
             <StackLayout Orientation="Horizontal">
                 <Switch IsToggled="{Binding Item.Conferma}" />
                 <Label Text="Confermata" />
