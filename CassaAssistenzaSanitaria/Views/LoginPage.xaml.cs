@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using CassaAssistenzaSanitaria.Models;
 using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 using CassaAssistenzaSanitaria.Services;
+using CassaAssistenzaSanitaria.ViewModels;
+using CassaAssistenzaSanitaria.Repositories;
 
 namespace CassaAssistenzaSanitaria.Views
 {
@@ -22,7 +25,7 @@ namespace CassaAssistenzaSanitaria.Views
             {
                 if (label.Text.Contains("Benvenuto"))
                 {
-                    await Navigation.PushAsync(new ElencoPage());
+                    await Navigation.PushAsync(new MainView(new MainViewModel(new HealtCareItemRepository())));
                 }
             }
         }

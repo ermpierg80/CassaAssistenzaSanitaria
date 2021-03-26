@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CassaAssistenzaSanitaria.Views.ItemView"
+             Title="{Binding Title}">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Rimuovi" Command="{Binding Remove}" />
+        <ToolbarItem Text="Salva" Command="{Binding Save}" />
+    </ContentPage.ToolbarItems>
+
+    <ScrollView>
+        <StackLayout Padding="14">
+            <Label Text="Numero Fattura" />
+            <Entry Text="{Binding Item.NumeroFattura}" />
+            <Label Text="Data Fattura" />
+            <DatePicker Date="{Binding Item.DataFattura}" Format="dd/MM/yyyy" />
+            <Label Text="Importo Fattura" />
+            <Entry x:Name="ImportoFattura" Text="{Binding Item.ImportoFattura}" />
+            <Label Text="Importo Rimborsato da Terzi" />
+            <Entry x:Name="ImportoRimborsatoDaTerzi" Text="{Binding Item.ImportoRimborsatoDaTerzi}" />
+            <Label Text="Prestazione" />
+            <Picker Title="seleziona tipologia di prestazione"
+                    ItemsSource="{Binding Prestazioni}"
+                    ItemDisplayBinding="{Binding Descrizione}"
+                    SelectedItem="{Binding Item.IdTipologia}"
+                    SelectedIndexChanged="Picker_BindingContextChanged">
+            </Picker>
+            <Label Text="Importo Rimasto a Carico" />
+            <Entry Text="{Binding Item.ImportoACarico}"  />
+            <Label Text="Importo Da Rimborsare" />
+            <Entry Text="{Binding Item.ImportoDaRimborsare}"  />
+            <Label Text="Note" />
+            <Editor Text="{Binding Item.Note}"/>
+            <StackLayout Orientation="Horizontal">
+                <Switch IsToggled="{Binding Item.Conferma}" />
+                <Label Text="Confermata" />
+            </StackLayout>
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

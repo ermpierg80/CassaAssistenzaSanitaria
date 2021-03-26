@@ -11,6 +11,16 @@
                 <Setter Property="BarBackgroundColor" Value="{StaticResource NavigationPrimary}" />
                 <Setter Property="BarTextColor" Value="White" />
             </Style>
+            <Style x:Key="FilterButton" TargetType="Button">
+                <Setter Property="Margin" Value="15" />
+                <Setter Property="BorderWidth" Value="1" />
+                <Setter Property="BorderRadius" Value="6" />
+                <Setter Property="BorderColor" Value="Silver" />
+                <Setter Property="TextColor" Value="Black" />
+            </Style>
+            
+            <Color x:Key="CompletedColor">#1C8859</Color>
+            <Color x:Key="ActiveColor">#D3D3D3</Color>
         </ResourceDictionary>
     </Application.Resources>
     

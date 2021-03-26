@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:CassaAssistenzaSanitaria"
+             xmlns:converters="clr-namespace:CassaAssistenzaSanitaria.Converters"
+             x:Class="CassaAssistenzaSanitaria.Views.MainView"
+             Title="{Binding Title}">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:StatusColorConverter x:Key="statusColorConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Nuova" Command="{Binding AddItem}" />
+    </ContentPage.ToolbarItems>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid 
+            ColumnDefinitions="50*, 50*"
+            ColumnSpacing="8" 
+            HorizontalOptions="FillAndExpand">
+            <Button Text="{Binding FilterText, StringFormat='Filter: {0}'}"
+                    BackgroundColor="{Binding ShowAll, Converter={StaticResource statusColorConverter}}"
+                    TextColor="Black"
+                    Command="{Binding ToggleFilter}" Grid.Column="0" HorizontalOptions="FillAndExpand">
+            
+                    <Button.Triggers>
+                        <DataTrigger TargetType="Button" Binding="{Binding ShowAll}" Value="True">
+                            <Setter Property="TextColor" Value="White" />
+                        </DataTrigger>
+                    </Button.Triggers>
+            </Button>
+            <Button Text="Sincronizza"
+                    BackgroundColor="Red"
+                    TextColor="Black"
+                    Command="{Binding Sincronizza}" Grid.Column="1" HorizontalOptions="FillAndExpand">
+            </Button>
+        </Grid>       
+
+        <ListView x:Name="ItemsListView"
+                  Grid.Row="1"
+                  RowHeight="70"
+                  ItemsSource="{Binding Items}"
+                  SelectedItem="{Binding SelectedItem}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        
+                        <ViewCell.ContextActions>
+                            <MenuItem Text="{Binding StatusText}" 
+                                      Command="{Binding ToggleCompleted}" />
+                        </ViewCell.ContextActions>
+
+                        <Grid Padding="15,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="10" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <BoxView Grid.RowSpan="2" BackgroundColor="{Binding Item.Conferma, 
+                                     Converter={StaticResource statusColorConverter}}" />
+                            <Label Grid.Column="1"
+                                   Text="{Binding Item.NumeroFattura}"
+                                   FontSize="Large" />
+                            <Label Grid.Column="1"
+                                   Text="{Binding Item.ImportoFattura, StringFormat='{0:C2}'}"
+                                   HorizontalTextAlignment="End"
+                                   FontSize="Large" />
+                            <Label Grid.Column="1"
+                                   Grid.Row="1"
+                                   Text="{Binding Item.DataFattura, StringFormat='{0:MMMM d, yyyy}'}"
+                                   FontSize="Micro" />
+                            <Label Grid.Column="1" 
+                                   Grid.Row="1" 
+                                   HorizontalTextAlignment="End" 
+                                   Text="Confermata" 
+                                   IsVisible="{Binding Item.Conferma}"
+                                   FontSize="Micro"
+                                   TextColor="{StaticResource CompletedColor}" />
+                            <Label Grid.Column="1" 
+                                   Grid.Row="1" 
+                                   HorizontalTextAlignment="End" 
+                                   Text="Trasmessa" 
+                                   IsVisible="{Binding Item.Trasmessa}"
+                                   FontSize="Micro"
+                                   TextColor="Red" />
+                        </Grid>
+
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+    </Grid>
+
+</ContentPage>

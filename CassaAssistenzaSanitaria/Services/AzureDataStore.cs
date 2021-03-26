@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using Xamarin.Essentials;
 using CassaAssistenzaSanitaria.Models;
 using System.Net.Http.Headers;
-using System.Text.Json;
+using Newtonsoft.Json;
 
 namespace CassaAssistenzaSanitaria.Services
 {
@@ -41,7 +40,23 @@ namespace CassaAssistenzaSanitaria.Services
                 if (!string.IsNullOrEmpty(loginToken))
                 {
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", loginToken);
-                    var response = client.PostAsync(@"/api/Richieste", new StringContent(JsonConvert.SerializeObject(richiesta), System.Text.Encoding.UTF8, "application/json")).Result;
+                    RichiestaSend richiestaJson = new RichiestaSend()
+                    {
+                        Id = richiesta.Id.ToString(),
+                        IdRichiedente = richiesta.IdRichiedente.ToString(),
+                        IdTipologia = richiesta.IdTipologia.ToString(),
+                        NumeroFattura = richiesta.NumeroFattura,
+                        Note = richiesta.Note,
+                        ImportoACarico = richiesta.ImportoACarico.ToString(),
+                        ImportoDaRimborsare = richiesta.ImportoDaRimborsare.ToString(),
+                        ImportoFattura = richiesta.ImportoFattura.ToString(),
+                        ImportoRimborsatoDaTerzi = richiesta.ImportoRimborsatoDaTerzi.ToString(),
+                        DataCancellazione = richiesta.DataCancellazione,
+                        DataConferma = richiesta.DataConferma,
+                        DataFattura = richiesta.DataFattura,
+                        DataRichiesta = richiesta.DataRichiesta
+                    };
+                    var response = client.PostAsync(@"/api/Richieste", new StringContent(JsonConvert.SerializeObject(richiestaJson), System.Text.Encoding.UTF8, "application/json")).Result;
                     if(response.IsSuccessStatusCode)
                     {
                         esito = true;
@@ -55,26 +70,25 @@ namespace CassaAssistenzaSanitaria.Services
             return esito;
         }
 
-        public async Task<Iscritto> GetIscrittoAsync()
+        public async Task<Iscritto> GetIscrittoAsync(bool ForceRefresh = false)
         {
-            Iscritto iscritto = null;
             try
             {
-                if (!string.IsNullOrEmpty(loginToken))
+                if (ForceRefresh)
                 {
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", loginToken);
-                    var response = client.GetAsync(@"/api/Iscritti/0").Result;
-                    var output_response = await response.Content.ReadAsStringAsync();
-
-                    if (!string.IsNullOrEmpty(output_response))
+                    if (!string.IsNullOrEmpty(loginToken))
                     {
-                        var options = new JsonSerializerOptions
+                        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", loginToken);
+                        var response = client.GetAsync(@"/api/Iscritti/0").Result;
+                        var output_response = await response.Content.ReadAsStringAsync();
+
+                        if (!string.IsNullOrEmpty(output_response))
                         {
-                            PropertyNameCaseInsensitive = true,
-                        };
-                        iscritto = System.Text.Json.JsonSerializer.Deserialize<Iscritto>(output_response, options);
+                            iscritto = JsonConvert.DeserializeObject<Iscritto>(output_response);
+                        }
                     }
                 }
+                
             }
             catch (Exception e)
             {
@@ -95,11 +109,7 @@ namespace CassaAssistenzaSanitaria.Services
 
                     if (!string.IsNullOrEmpty(output_response))
                     {
-                        var options = new JsonSerializerOptions
-                        {
-                            PropertyNameCaseInsensitive = true,
-                        };
-                        prestazioni = System.Text.Json.JsonSerializer.Deserialize<IEnumerable<Prestazione>>(output_response, options);
+                        prestazioni = JsonConvert.DeserializeObject<IEnumerable<Prestazione>>(output_response);
                     }
                 }
             }
@@ -124,11 +134,7 @@ namespace CassaAssistenzaSanitaria.Services
 
                     if (!string.IsNullOrEmpty(output_response))
                     {
-                        var options = new JsonSerializerOptions
-                        {
-                            PropertyNameCaseInsensitive = true,
-                        };
-                        richiesta = System.Text.Json.JsonSerializer.Deserialize<Richiesta>(output_response, options);
+                        richiesta = JsonConvert.DeserializeObject<Richiesta>(output_response);
                     }
                 }
             }
@@ -152,11 +158,7 @@ namespace CassaAssistenzaSanitaria.Services
 
                     if (!string.IsNullOrEmpty(output_response))
                     {
-                        var options = new JsonSerializerOptions
-                        {
-                            PropertyNameCaseInsensitive = true,
-                        };
-                        richieste = System.Text.Json.JsonSerializer.Deserialize<IEnumerable<Richiesta>>(output_response, options);
+                        richieste = JsonConvert.DeserializeObject<IEnumerable<Richiesta>>(output_response);
                     }
                 }
             }
@@ -180,7 +182,8 @@ namespace CassaAssistenzaSanitaria.Services
 
                     if (!string.IsNullOrEmpty(output_response))
                     {
-                        loginToken = System.Text.Json.JsonSerializer.Deserialize<Autenticazione>(output_response).token;
+                        Autenticazione Aut = JsonConvert.DeserializeObject<Autenticazione>(output_response);
+                        loginToken = Aut.token;
                         if (!string.IsNullOrEmpty(loginToken))
                         {
                             output = true;
