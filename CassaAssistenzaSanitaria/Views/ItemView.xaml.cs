@@ -40,5 +40,15 @@ namespace CassaAssistenzaSanitaria.Views
             var entry = (Entry)sender;
             entry.Text = entry.Text.Replace(",", ".");
         }
+
+        void Switch_PropertyChanged(System.Object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            var switchConfermata = (Switch)sender;
+
+            if (switchConfermata != null)
+            {
+                MessagingCenter.Send(this, "ChangeConfermata", switchConfermata.IsToggled);
+            }
+        }
     }
-}
+} 

@@ -35,7 +35,7 @@ namespace CassaAssistenzaSanitaria.ViewModels
             Item = new HealtCareItem() { Richiedente = IscrittoAssociazione.Id, DataFattura = DateTime.Now, DataRichiesta = DateTime.Now, Conferma = false, Trasmessa = false };
 
             MessagingCenter.Subscribe<ItemView, int>(this, "TipologiaPrestazioneSelezionata", (obj, IdTipologia) =>
-            { 
+            {
                 Item.Tipologia = IdTipologia;
                 if (Item.ImportoFattura > 0)
                 {
@@ -49,9 +49,21 @@ namespace CassaAssistenzaSanitaria.ViewModels
                         }
                     }
                 }
-                RaisePropertyChanged(nameof(Item)); 
+                RaisePropertyChanged(nameof(Item));
             });
 
+            MessagingCenter.Subscribe<ItemView, bool>(this, "ChangeConfermata", (obj, Toggled) =>
+            {
+                if (Toggled)
+                {
+                    Item.DataConferma = DateTime.Now;
+                }
+                else
+                {
+                    Item.DataConferma = DateTime.MinValue;
+                }
+
+            });
         }
 
         public ICommand Save => new Command(async () =>

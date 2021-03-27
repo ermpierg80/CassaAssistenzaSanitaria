@@ -32,7 +32,7 @@
             <Label Text="Note" />
             <Editor Text="{Binding Item.Note}" />
             <StackLayout Orientation="Horizontal">
-                <Switch IsToggled="{Binding Item.Conferma}" />
+                <Switch IsToggled="{Binding Item.Conferma}" PropertyChanged="Switch_PropertyChanged"/>
                 <Label Text="Confermata" />
             </StackLayout>
         </StackLayout>
