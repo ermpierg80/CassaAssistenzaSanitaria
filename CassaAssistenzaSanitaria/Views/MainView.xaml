@@ -21,10 +21,10 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid 
-            ColumnDefinitions="50*, 50*"
+            ColumnDefinitions="70*, 30*"
             ColumnSpacing="8" 
             HorizontalOptions="FillAndExpand">
-            <Button Text="{Binding FilterText, StringFormat='Filter: {0}'}"
+            <Button Text="{Binding FilterText, StringFormat='Agg. e filtra: {0}'}"
                     BackgroundColor="{Binding ShowAll, Converter={StaticResource statusColorConverter}}"
                     TextColor="Black"
                     Command="{Binding ToggleFilter}" Grid.Column="0" HorizontalOptions="FillAndExpand">

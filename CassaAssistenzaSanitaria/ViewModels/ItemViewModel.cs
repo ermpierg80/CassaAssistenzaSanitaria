@@ -88,7 +88,7 @@ namespace CassaAssistenzaSanitaria.ViewModels
             }
             else
             {
-                MessagingCenter.Send(this, "MostraAvviso");
+              MessagingCenter.Send(this, "MostraAvviso");
             }
         });
     }
