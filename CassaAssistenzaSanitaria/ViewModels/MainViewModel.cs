@@ -151,6 +151,7 @@ namespace CassaAssistenzaSanitaria.ViewModels
             var itemView = new ItemView(new ItemViewModel(new HealtCareItemRepository()));
             var vm = itemView.BindingContext as ItemViewModel;
             vm.Item = item.Item;
+            vm.SettaTipologia();
 
             await Navigation.PushAsync(itemView);
         }

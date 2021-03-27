@@ -19,7 +19,8 @@
             <Label Text="Importo Rimborsato da Terzi" />
             <Entry x:Name="ImportoRimborsatoDaTerzi" Text="{Binding Item.ImportoRimborsatoDaTerzi}" Keyboard="Numeric" TextChanged="Importo_TextChanged" />
             <Label Text="Prestazione" />
-            <Picker Title="seleziona tipologia di prestazione"
+            <Picker x:Name="Tipologia"
+                    Title="seleziona tipologia di prestazione"
                     ItemsSource="{Binding Prestazioni}"
                     ItemDisplayBinding="{Binding Descrizione}"
                     SelectedItem="{Binding Item.IdTipologia}"

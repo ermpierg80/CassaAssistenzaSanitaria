@@ -11,12 +11,12 @@ using Xamarin.Forms.Xaml;
 
 namespace CassaAssistenzaSanitaria.Views
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class ItemView : ContentPage
-	{
-		public ItemView (ItemViewModel viewmodel)
-		{
-			InitializeComponent();
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class ItemView : ContentPage
+    {
+        public ItemView(ItemViewModel viewmodel)
+        {
+            InitializeComponent();
             viewmodel.Navigation = Navigation;
             BindingContext = viewmodel;
 
@@ -24,7 +24,12 @@ namespace CassaAssistenzaSanitaria.Views
             {
                 await DisplayAlert("Attenzione", "Non è possible modificare una richiesta trasmessa!", "OK");
             });
-        }
+
+            MessagingCenter.Subscribe<ItemViewModel, string>(this, "SettaTipologia", (obj, Descrizione) =>
+            {
+                Tipologia.Title = Descrizione;
+            });
+        } 
 
         void Picker_BindingContextChanged(System.Object sender, System.EventArgs e)
         {

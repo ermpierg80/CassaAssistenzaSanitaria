@@ -66,6 +66,18 @@ namespace CassaAssistenzaSanitaria.ViewModels
             });
         }
 
+        public void SettaTipologia()
+        {
+            foreach (Prestazione p in Prestazioni)
+            {
+                if(p.Id.Equals(Item.Tipologia))
+                {
+                    MessagingCenter.Send(this, "SettaTipologia", p.Descrizione);
+                    break;
+                }
+            }
+        }
+
         public ICommand Save => new Command(async () =>
         {
             if (!Item.Trasmessa)
