@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using Xamarin.Essentials;
 using CassaAssistenzaSanitaria.Models;
 using System.Net.Http.Headers;
-using System.Text.Json;
+using Newtonsoft.Json;
 
 namespace CassaAssistenzaSanitaria.Services
 {
     public class AzureDataStore : DataStore
     {
         HttpClient client;
+        Richiesta richiesta;
         IEnumerable<Richiesta> richieste;
         IEnumerable<Prestazione> prestazioni;
         Iscritto iscritto;
@@ -29,33 +29,66 @@ namespace CassaAssistenzaSanitaria.Services
 
             richieste = new List<Richiesta>();
             prestazioni = new List<Prestazione>();
+            richiesta = null;
         }
 
-        public Task<bool> AddRichiestaAsync(Richiesta richiesta)
+        public bool AddRichiestaAsync(Richiesta richiesta)
         {
-            throw new NotImplementedException();
-        }
-
-        public async Task<Iscritto> GetIscrittoAsync()
-        {
-            Iscritto iscritto = null;
+            bool esito = false;
             try
             {
                 if (!string.IsNullOrEmpty(loginToken))
                 {
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", loginToken);
-                    var response = client.GetAsync(@"/api/Iscritti/0").Result;
-                    var output_response = await response.Content.ReadAsStringAsync();
-
-                    if (!string.IsNullOrEmpty(output_response))
+                    RichiestaSend richiestaJson = new RichiestaSend()
                     {
-                        var options = new JsonSerializerOptions
+                        Id = richiesta.Id.ToString(),
+                        IdRichiedente = richiesta.IdRichiedente.ToString(),
+                        IdTipologia = richiesta.IdTipologia.ToString(),
+                        NumeroFattura = richiesta.NumeroFattura,
+                        Note = richiesta.Note,
+                        ImportoACarico = richiesta.ImportoACarico.ToString(),
+                        ImportoDaRimborsare = richiesta.ImportoDaRimborsare.ToString(),
+                        ImportoFattura = richiesta.ImportoFattura.ToString(),
+                        ImportoRimborsatoDaTerzi = richiesta.ImportoRimborsatoDaTerzi.ToString(),
+                        DataCancellazione = richiesta.DataCancellazione,
+                        DataConferma = richiesta.DataConferma,
+                        DataFattura = richiesta.DataFattura,
+                        DataRichiesta = richiesta.DataRichiesta
+                    };
+                    var response = client.PostAsync(@"/api/Richieste", new StringContent(JsonConvert.SerializeObject(richiestaJson), System.Text.Encoding.UTF8, "application/json")).Result;
+                    if(response.IsSuccessStatusCode)
+                    {
+                        esito = true;
+                    }   
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message, e.InnerException);
+            }
+            return esito;
+        }
+
+        public async Task<Iscritto> GetIscrittoAsync(bool ForceRefresh = false)
+        {
+            try
+            {
+                if (ForceRefresh)
+                {
+                    if (!string.IsNullOrEmpty(loginToken))
+                    {
+                        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", loginToken);
+                        var response = client.GetAsync(@"/api/Iscritti/0").Result;
+                        var output_response = await response.Content.ReadAsStringAsync();
+
+                        if (!string.IsNullOrEmpty(output_response))
                         {
-                            PropertyNameCaseInsensitive = true,
-                        };
-                        iscritto = System.Text.Json.JsonSerializer.Deserialize<Iscritto>(output_response, options);
+                            iscritto = JsonConvert.DeserializeObject<Iscritto>(output_response);
+                        }
                     }
                 }
+                
             }
             catch (Exception e)
             {
@@ -64,28 +97,84 @@ namespace CassaAssistenzaSanitaria.Services
             return iscritto;
         }
 
-        public Task<IEnumerable<Prestazione>> GetPrestazioniAsync(bool forceRefresh = false)
+        public async Task<IEnumerable<Prestazione>> GetPrestazioniAsync()
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (!string.IsNullOrEmpty(loginToken))
+                {
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", loginToken);
+                    var response = client.GetAsync(@"/api/Prestazioni").Result;
+                    var output_response = await response.Content.ReadAsStringAsync();
+
+                    if (!string.IsNullOrEmpty(output_response))
+                    {
+                        prestazioni = JsonConvert.DeserializeObject<IEnumerable<Prestazione>>(output_response);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message, e.InnerException);
+            }
+            return prestazioni;
         }
 
-        public Task<Richiesta> GetRichiestaAsync(int id)
+        public async Task<Richiesta> GetRichiestaAsync(int id)
         {
-            throw new NotImplementedException();
+            richiesta = null;
+
+            try
+            {
+                if (!string.IsNullOrEmpty(loginToken))
+                {
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", loginToken);
+                    var response = client.GetAsync(@"/api/Richieste/" + id.ToString()).Result;
+                    var output_response = await response.Content.ReadAsStringAsync();
+
+                    if (!string.IsNullOrEmpty(output_response))
+                    {
+                        richiesta = JsonConvert.DeserializeObject<Richiesta>(output_response);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message, e.InnerException);
+            }
+
+            return richiesta;
         }
 
-        public Task<IEnumerable<Richiesta>> GetRichiesteAsync(bool forceRefresh = false)
+        public async Task<IEnumerable<Richiesta>> GetRichiesteAsync()
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (!string.IsNullOrEmpty(loginToken))
+                {
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", loginToken);
+                    var response = client.GetAsync(@"/api/Richieste").Result;
+                    var output_response = await response.Content.ReadAsStringAsync();
+
+                    if (!string.IsNullOrEmpty(output_response))
+                    {
+                        richieste = JsonConvert.DeserializeObject<IEnumerable<Richiesta>>(output_response);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message, e.InnerException);
+            }
+            return richieste;
         }
 
         public async Task<bool> LoginTokenAsync(Login login)
         {
             bool output = false;
             loginToken = null;
-            if (login != null && login.Username != null && login.Password != null && IsConnected)
+            if (login != null && !string.IsNullOrEmpty(login.Username) && !string.IsNullOrEmpty(login.Password) && IsConnected)
             {
-                var serializedItem = JsonConvert.SerializeObject(login);
                 try
                 {
                     var response = client.PostAsync($"api/Authenticate/login", new StringContent(JsonConvert.SerializeObject(login), System.Text.Encoding.UTF8, "application/json")).Result;
@@ -93,7 +182,8 @@ namespace CassaAssistenzaSanitaria.Services
 
                     if (!string.IsNullOrEmpty(output_response))
                     {
-                        loginToken = System.Text.Json.JsonSerializer.Deserialize<Autenticazione>(output_response).token;
+                        Autenticazione Aut = JsonConvert.DeserializeObject<Autenticazione>(output_response);
+                        loginToken = Aut.token;
                         if (!string.IsNullOrEmpty(loginToken))
                         {
                             output = true;
@@ -108,11 +198,53 @@ namespace CassaAssistenzaSanitaria.Services
             return output;
         }
 
-        public Task<bool> UpdateRichiestaAsync(Richiesta richiesta)
+        public bool UpdateRichiestaAsync(Richiesta richiesta)
         {
-            throw new NotImplementedException();
+            bool esito = false;
+            try
+            {
+                if (!string.IsNullOrEmpty(loginToken))
+                {
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", loginToken);
+                    var response = client.PutAsync(@"/api/Richieste", new StringContent(JsonConvert.SerializeObject(richiesta), System.Text.Encoding.UTF8, "application/json")).Result;
+                    if (response.IsSuccessStatusCode)
+                    {
+                        esito = true;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message, e.InnerException);
+            }
+            return esito;
         }
 
+        public async Task<bool> LoginChangeAsync(ChangeLogin login)
+        {
+            bool output = false;
+            if (login != null && !string.IsNullOrEmpty(login.Username)
+                && !string.IsNullOrEmpty(login.OldPassword) && !string.IsNullOrEmpty(login.NewPassword) && IsConnected)
+            {
+                try
+                {
+                    var response = client.PutAsync($"api/Authenticate", new StringContent(JsonConvert.SerializeObject(login), System.Text.Encoding.UTF8, "application/json")).Result;
+                    var output_response = await response.Content.ReadAsStringAsync();
 
+                    if (!string.IsNullOrEmpty(output_response))
+                    {
+                        if (bool.Parse(output_response))
+                        {
+                            output = true;
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    throw new Exception(e.Message, e.InnerException);
+                }
+            }
+            return output; 
+        }
     }
 }

@@ -7,10 +7,12 @@ using Xamarin.Forms;
 
 using CassaAssistenzaSanitaria.Models;
 using CassaAssistenzaSanitaria.Views;
+using System.Windows.Input;
+using CassaAssistenzaSanitaria.Repositories;
 
 namespace CassaAssistenzaSanitaria.ViewModels
 {
-    public class LoginViewModel : CABaseViewModel
+    public class LoginViewModel : ViewModel
     {
         private Login login;
         private Iscritto iscritto;
@@ -18,11 +20,11 @@ namespace CassaAssistenzaSanitaria.ViewModels
 
         public LoginViewModel()
         {
-            Title = "Login Cassa Assistenza Sanitaria";
+            Title = "Login";
             login = new Login
             {
-                Username = "ErmPierg",
-                Password = "Test@123"
+                Username = "",
+                Password = ""
             };
             Benvenuto = "";
             IscrittoAssociazione = null;
@@ -31,7 +33,7 @@ namespace CassaAssistenzaSanitaria.ViewModels
                 bool esito = await DataStore.LoginTokenAsync(login);
                 if (esito)
                 {
-                    IscrittoAssociazione = await DataStore.GetIscrittoAsync();
+                    IscrittoAssociazione = await DataStore.GetIscrittoAsync(true);
                     if (IscrittoAssociazione != null)
                     {
                         Benvenuto = "Benvenuto " + IscrittoAssociazione.Nome + " " + IscrittoAssociazione.Cognome + "!";
@@ -45,32 +47,31 @@ namespace CassaAssistenzaSanitaria.ViewModels
                 {
                     Benvenuto = "Autenticazione fallita";
                 }
-
-            });
-            MessagingCenter.Subscribe<LoginPage>(this, "RemoveToken", async (obj) =>
-            {
-                IscrittoAssociazione = null;
-                Benvenuto = "";
             });
         }
 
         public Iscritto IscrittoAssociazione
         {
             get { return iscritto; }
-            set { SetProperty(ref iscritto, value); }
+            set { iscritto = value; RaisePropertyChanged(nameof(IscrittoAssociazione)); }
         }
 
         public Login Login
         {
             get { return login; }
-            set { SetProperty(ref login, value); }
+            set { login = value; RaisePropertyChanged(nameof(Login)); }
         }
 
         public string Benvenuto
         {
             get { return benvenuto; }
-            set { SetProperty(ref benvenuto, value); }
+            set { benvenuto = value; RaisePropertyChanged(nameof(Benvenuto)); }
         }
+
+        public ICommand ChangePwd => new Command(() =>
+        {
+            MessagingCenter.Send(this, "ChangePage");
+        });
 
     }
 }
