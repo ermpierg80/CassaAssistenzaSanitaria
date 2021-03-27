@@ -31,6 +31,7 @@ namespace CassaAssistenzaSanitaria.Views
             var picker = (Picker)sender;
             if (picker.SelectedItem != null)
             {
+                picker.Title = ((Prestazione)picker.SelectedItem).Descrizione;
                 MessagingCenter.Send(this, "TipologiaPrestazioneSelezionata", ((Prestazione)picker.SelectedItem).Id);
             }
         }
