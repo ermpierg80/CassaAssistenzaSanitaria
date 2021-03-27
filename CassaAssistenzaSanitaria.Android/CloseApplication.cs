@@ -10,7 +10,7 @@ namespace CassaAssistenzaSanitaria.Droid
     {
         public void closeApplication()
         {
-            Android.OS.Process.KillProcess(Android.OS.Process.MyPid());
+            (Android.App.Application.Context as Activity).Finish();
         }
     }
 }
