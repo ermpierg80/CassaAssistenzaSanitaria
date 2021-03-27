@@ -23,8 +23,8 @@ namespace CassaAssistenzaSanitaria.ViewModels
             Title = "Login";
             login = new Login
             {
-                Username = "ErmPierg",
-                Password = "Test@123"
+                Username = "",
+                Password = ""
             };
             Benvenuto = "";
             IscrittoAssociazione = null;

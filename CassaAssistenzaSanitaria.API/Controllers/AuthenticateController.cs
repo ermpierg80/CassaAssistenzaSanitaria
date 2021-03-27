@@ -67,6 +67,39 @@ namespace CassaAssistenzaSanitaria.API.Controllers
             return Unauthorized();
         }
 
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public async Task<bool> Post([FromBody] UserMakeModel model)
+        {
+            bool esito = false;
+            if (model != null)
+            {
+                try
+                {
+                    ApplicationUser user = new ApplicationUser()
+                    {
+                        Email = model.EMail,
+                        UserName = model.Username,
+                        SecurityStamp = Guid.NewGuid().ToString()
+                    };
+                    var identity = await userManager.CreateAsync(user, model.Password);
+                    if (identity != null)
+                    {
+                        esito = identity.Succeeded;
+                    }
+                    if (!esito)
+                    {
+                        throw new Exception(identity.Errors.ToString());
+                    }
+                }
+                catch (Exception e)
+                {
+                    log.Error(e.ToString());
+                }
+            }
+            return esito;
+        }
+
         [HttpPut]
         public async Task<bool> Put([FromBody] LoginChangeModel model)
         {
