@@ -12,7 +12,7 @@ namespace CassaAssistenzaSanitaria
         //TODO: Replace with *.azurewebsites.net url after deploying backend to Azure
         //To debug on Android emulators run the web backend against .NET Core not IIS
         //If using other emulators besides stock Google images you may need to adjust the IP address
-        public static string AzureBackendUrl = Device.RuntimePlatform.Equals(DevicePlatform.iOS.ToString()) ? "http://localhost:63679" : "http://10.0.1.9:63679";
+        public static string AzureBackendUrl = Device.RuntimePlatform.Equals(DevicePlatform.iOS.ToString()) ? "http://localhost:63679" : "http://10.0.2.2:63679";
 
         public App()
         {
