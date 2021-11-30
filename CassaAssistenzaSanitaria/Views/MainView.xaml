@@ -44,7 +44,7 @@
 
         <ListView x:Name="ItemsListView"
                   Grid.Row="1"
-                  RowHeight="70"
+                  RowHeight="80"
                   ItemsSource="{Binding Items}"
                   SelectedItem="{Binding SelectedItem}">
             <ListView.ItemTemplate>
@@ -68,12 +68,12 @@
                                    Text="{Binding Item.NumeroFattura}"
                                    FontSize="Large" />
                             <Label Grid.Column="1"
-                                   Text="{Binding Item.ImportoFattura, StringFormat='{0:C2}'}"
+                                   Text="{Binding Item.ImportoFattura, StringFormat='{}{0:N}€'}"
                                    HorizontalTextAlignment="End"
                                    FontSize="Large" />
                             <Label Grid.Column="1"
                                    Grid.Row="1"
-                                   Text="{Binding Item.DataFattura, StringFormat='{0:MMMM d, yyyy}'}"
+                                   Text="{Binding Item.DataFattura, StringFormat='{0:dd/MM/yyyy}'}"
                                    FontSize="Micro" />
                             <Label Grid.Column="1" 
                                    Grid.Row="1" 
